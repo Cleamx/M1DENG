@@ -1,0 +1,23 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Créer un compte</title>
+    <link rel="stylesheet" href="{% static 'login_app/css/signup.css' %}"> 
+</head>
+<body>
+    <div class="signup-container">  
+        <h1>Créer un nouveau compte</h1>
+
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}  <!-- Afficher tous les champs du formulaire (forms.py) -->
+            <button type="submit">Créer un compte</button>
+        </form>
+
+        <p>Vous avez déjà un compte ? <a href="{% url 'login' %}">Se connecter</a></p>
+    </div>
+</body>
+</html>

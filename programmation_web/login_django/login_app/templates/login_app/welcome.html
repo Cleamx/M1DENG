@@ -1,11 +1,17 @@
-<!-- templates/login_app/welcome.html -->
+{% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bienvenue</title>
+    <link rel="stylesheet" href="{% static 'login_app/css/welcome.css' %}">
 </head>
 <body>
-    <h2>Bienvenue {{ user_login}}!</h2>
-    <p>Vous êtes maintenant connecté.</p>
+    <div class="container">
+        <h1>Bienvenue, {{ user_login }} !</h1>
+        <p>Vous êtes maintenant connecté.</p>
+        <a href="{% url 'logout' %}">Déconnexion</a>
+    </div>
 </body>
 </html>
