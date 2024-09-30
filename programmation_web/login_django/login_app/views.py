@@ -63,5 +63,5 @@ def signup_view(request):
         # Si la requête n'est pas POST, crée un formulaire vide
         form = SignupForm()
 
-    # Rendre le template de création de compte avec le formulaire
+    # Renvoie le template de création de compte avec le formulaire
     return render(request, 'login_app/signup.html', {'form': form})
