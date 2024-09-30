@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Supprimer l'objet</title>
+</head>
+<body>
+    <h1>Supprimer {{ item.name }}</h1>
+    <p>Voulez-vous vraiment supprimer cet objet ?</p>
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit">Oui, supprimer</button>
+    </form>
+    <a href="{% url 'list' %}">Annuler</a>
+</body>
+</html>

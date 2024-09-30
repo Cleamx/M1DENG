@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Mon Inventaire</title>
+</head>
+<body>
+    <h1>Inventaire de {{ request.user_login }}</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Nom de l'objet</th>
+                <th>Type</th>
+                <th>Quantité</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr>
+                <td>{{ item.name }}</td>
+                <td>{{ item.get_item_type_display }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>
+                    <a href="{% url 'update_item' item.id %}">Modifier</a> |
+                    <a href="{% url 'delete_item' item.id %}">Supprimer</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4">Aucun objet dans l'inventaire</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{% url 'add_item' %}">Ajouter un nouvel objet</a>
+</body>
+</html>

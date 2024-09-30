@@ -1,31 +1,30 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,  get_object_or_404
 from django.contrib import messages
-from .models import User
-from .forms import SignupForm
+from .models import User, Item
+from .forms import SignupForm, ItemForm
+from django.contrib.auth.hashers import make_password, check_password
+from django.contrib.auth.decorators import login_required
+
 
 def login_view(request):
-    # Vérifie si la requête est de type POST (soumission du formulaire)
     if request.method == 'POST':
-        # Récupère le nom d'utilisateur et le mot de passe du formulaire
         username = request.POST.get('username')
         password = request.POST.get('password')
 
-        # Vérification de l'existence de l'utilisateur dans la base de données
         try:
-            user = User.objects.get(user_login=username)  # Récupère l'utilisateur par son login
-            if user.user_password == password:  # Vérifie si le mot de passe est correct
-                # Stocke les informations de l'utilisateur dans la session
+            user = User.objects.get(user_login=username)
+            # Vérifier si le mot de passe saisi correspond au mot de passe haché en base
+            if check_password(password, user.user_password):
+                # Si le mot de passe est correct, stocker les informations dans la session
                 request.session['user_id'] = user.user_id
                 request.session['user_login'] = user.user_login
-                return redirect('welcome')  # Redirige vers la vue 'welcome'
+
+                return redirect('welcome')
             else:
-                # Affiche un message d'erreur si le mot de passe est incorrect
                 messages.error(request, 'Mot de passe incorrect')
         except User.DoesNotExist:
-            # Affiche un message d'erreur si l'utilisateur n'est pas trouvé
             messages.error(request, 'Utilisateur non trouvé')
 
-    # Rendre le template de connexion
     return render(request, 'login_app/login.html')
 
 
@@ -49,19 +48,90 @@ def logout_view(request):
 
 
 def signup_view(request):
-    # Vérifie si la requête est de type POST (soumission du formulaire)
     if request.method == 'POST':
-        # Crée une instance du formulaire avec les données soumises
         form = SignupForm(request.POST)
-        if form.is_valid():  # Vérifie si le formulaire est valide
-            form.save()  # Enregistre le nouvel utilisateur dans la base de données
-            # Affiche un message de succès
+        if form.is_valid():
+            # Hasher le mot de passe avant de sauvegarder le nouvel utilisateur
+            user = form.save(commit=False)
+            user.user_password = make_password(
+                form.cleaned_data['user_password'])
+            user.save()
+
             messages.success(request, "Votre compte a été créé avec succès.")
-            # Redirige vers la page de connexion
             return redirect('login')
     else:
-        # Si la requête n'est pas POST, crée un formulaire vide
         form = SignupForm()
 
-    # Renvoie le template de création de compte avec le formulaire
     return render(request, 'login_app/signup.html', {'form': form})
+
+# Lister les objets de l'inventaire de l'utilisateur connecté
+
+
+@login_required
+def inventory_list(request):
+    user_id = request.session.get('user_id')
+
+    if not user_id:
+        return redirect('login')
+
+    user = User.objects.get(user_id=user_id)
+
+    items = Item.objects.filter(user=user)
+
+    return render(request, 'login_app/list.html', {'items': items})
+
+
+@login_required
+def add_item(request):
+    if request.method == 'POST':
+        form = ItemForm(request.POST)
+        if form.is_valid():
+            # On ne sauvegarde pas tout de suite pour associer l'utilisateur
+            item = form.save(commit=False)
+            item.user = request.user  # Associer l'objet à l'utilisateur connecté
+            item.save()
+            messages.success(request, 'Objet ajouté avec succès !')
+            return redirect('list')  # Redirige vers la liste des objets
+    else:
+        form = ItemForm()
+    return render(request, 'login_app/add_item.html', {'form': form})
+
+# Mettre à jour la quantité d'un objet
+
+
+@login_required
+@login_required
+def update_item(request, item_id):
+    user_id = request.session.get('user_id')
+    user = get_object_or_404(User, pk=user_id)
+    item = get_object_or_404(Item, id=item_id, user=user)
+
+    if request.method == 'POST':
+        form = ItemForm(request.POST, instance=item)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Objet mis à jour avec succès !')
+            return redirect('list')
+    else:
+        form = ItemForm(instance=item)
+
+    return render(request, 'login_app/update_item.html', {'form': form})
+
+
+@login_required
+def delete_item(request, item_id):
+    user = request.user
+
+    # Afficher des informations pour le débogage
+    print(f'Utilisateur connecté: {user}')
+    print(f'ID de l\'objet à supprimer: {item_id}')
+
+    # Récupérer l'objet à supprimer, en s'assurant qu'il appartient à l'utilisateur connecté
+    item = get_object_or_404(Item, id=item_id, user=user)
+
+    if request.method == 'POST':
+        item.delete()
+        messages.success(request, 'Objet supprimé avec succès !')
+        return redirect('list')
+
+    return render(request, 'login_app/delete_item.html', {'item': item})

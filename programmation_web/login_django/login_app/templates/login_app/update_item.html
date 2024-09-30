@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Modifier l'objet</title>
+</head>
+<body>
+    <h1>Modifier l'objet</h1>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Modifier</button>
+    </form>
+    <a href="{% url 'list' %}">Retour à l'inventaire</a>
+</body>
+</html>
