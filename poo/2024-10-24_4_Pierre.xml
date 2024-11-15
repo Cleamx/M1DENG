@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<avatar id='4'>
+    <name>Pierre</name>
+    <race>Human</race>
+    <level>Warrior</level>
+    <xp>1</xp>
+    <name>1</name>
+    <stats>
+        <_strength>25</_strength>
+        <magic>15</magic>
+        <agility>20</agility>
+        <speed>25</speed>
+        <charisma>25</charisma>
+        <chance>30</chance>
+        <endurance>79</endurance>
+        <life_point>127</life_point>
+        <attack>125</attack>
+        <defense>174</defense>
+    </stats>
+    <equipments>
+        <item_1>dragon sword</item_1>
+    </equipments>
+    <bag>
+        <item_1>life potion</item_1>
+        <item_2>life potion</item_2>
+    </bag>
+</avatar>

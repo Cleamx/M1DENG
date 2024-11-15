@@ -39,7 +39,7 @@ class SignupForm(forms.ModelForm):
 class ItemForm(forms.ModelForm):
     class Meta:
         model = Item
-        fields = ['name', 'item_type', 'quantity']  # Exclure le champ 'user' qui est géré par le backend
+        fields = ['name', 'item_type', 'quantity'] 
         labels = {
             'name': 'Nom de l\'objet',
             'item_type': 'Type d\'objet',

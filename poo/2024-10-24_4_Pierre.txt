@@ -1,0 +1,18 @@
+Pierre
+Human
+Warrior
+lvl: 1
+xp: 1
+_strength 25
+magic 15
+agility 20
+speed 25
+charisma 25
+chance 30
+endurance 79
+life_point 127
+attack 125
+defense 174
+dragon sword
+life potion
+life potion

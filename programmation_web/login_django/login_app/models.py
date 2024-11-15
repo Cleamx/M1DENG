@@ -26,10 +26,10 @@ class Item(models.Model):
     # Clé étrangère pour lier l'objet à un utilisateur
     # Lien avec le modèle User
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
-    name = models.CharField(max_length=100)  # Nom de l'objet
+    name = models.CharField(max_length=100) 
     item_type = models.CharField(
-        max_length=20, choices=ITEM_TYPES)  # Type d'objet
-    quantity = models.IntegerField(default=0)  # Quantité
+        max_length=20, choices=ITEM_TYPES)  
+    quantity = models.IntegerField(default=0)
 
     def __str__(self):
         return f'{self.name} ({self.quantity})'

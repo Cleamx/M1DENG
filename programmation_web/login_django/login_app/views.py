@@ -13,9 +13,7 @@ def login_view(request):
 
         try:
             user = User.objects.get(user_login=username)
-            # Vérifier si le mot de passe saisi correspond au mot de passe haché en base
             if check_password(password, user.user_password):
-                # Si le mot de passe est correct, stocker les informations dans la session
                 request.session['user_id'] = user.user_id
                 request.session['user_login'] = user.user_login
 
@@ -29,21 +27,16 @@ def login_view(request):
 
 
 def welcome_view(request):
-    # Récupère le nom d'utilisateur de la session
     user_login = request.session.get('user_login')
 
     if user_login:
-        # Rendre le template de bienvenue avec le nom d'utilisateur
         return render(request, 'login_app/welcome.html', {'user_login': user_login})
     else:
-        # Redirige vers la page de connexion si l'utilisateur n'est pas authentifié
         return redirect('login')
 
 
 def logout_view(request):
-    # Efface toutes les données de session (comme user_id et user_login)
     request.session.flush()
-    # Redirige l'utilisateur vers la page de connexion
     return redirect('login')
 
 
@@ -51,7 +44,6 @@ def signup_view(request):
     if request.method == 'POST':
         form = SignupForm(request.POST)
         if form.is_valid():
-            # Hasher le mot de passe avant de sauvegarder le nouvel utilisateur
             user = form.save(commit=False)
             user.user_password = make_password(
                 form.cleaned_data['user_password'])
@@ -63,8 +55,6 @@ def signup_view(request):
         form = SignupForm()
 
     return render(request, 'login_app/signup.html', {'form': form})
-
-# Lister les objets de l'inventaire de l'utilisateur connecté
 
 
 @login_required
@@ -86,20 +76,16 @@ def add_item(request):
     if request.method == 'POST':
         form = ItemForm(request.POST)
         if form.is_valid():
-            # On ne sauvegarde pas tout de suite pour associer l'utilisateur
             item = form.save(commit=False)
-            item.user = request.user  # Associer l'objet à l'utilisateur connecté
+            item.user = User.objects.get(user_login=request.user.user_login) 
             item.save()
             messages.success(request, 'Objet ajouté avec succès !')
-            return redirect('list')  # Redirige vers la liste des objets
+            return redirect('list')
     else:
         form = ItemForm()
     return render(request, 'login_app/add_item.html', {'form': form})
 
-# Mettre à jour la quantité d'un objet
 
-
-@login_required
 @login_required
 def update_item(request, item_id):
     user_id = request.session.get('user_id')
@@ -120,13 +106,8 @@ def update_item(request, item_id):
 
 @login_required
 def delete_item(request, item_id):
-    user = request.user
-
-    # Afficher des informations pour le débogage
-    print(f'Utilisateur connecté: {user}')
-    print(f'ID de l\'objet à supprimer: {item_id}')
-
-    # Récupérer l'objet à supprimer, en s'assurant qu'il appartient à l'utilisateur connecté
+    user_id = request.session.get('user_id')
+    user = get_object_or_404(User, pk=user_id)
     item = get_object_or_404(Item, id=item_id, user=user)
 
     if request.method == 'POST':
