@@ -2,7 +2,6 @@ from django.contrib import admin
 
 # Register your models here.
 
-from .models import User, Item
+from .models import User
 
 admin.site.register(User)
-admin.site.register(Item)

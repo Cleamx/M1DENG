@@ -1,0 +1,23 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Pac-Man Game</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'login_app/css/styles.css' %}" />
+  </head>
+  <body>
+    <div class="nav-buttons">
+      <a href="{% url 'welcome' %}">Retour à l'accueil</a>
+      <a href="{% url 'highscores' %}">Scores</a>
+    </div>
+    <div id="game-container"></div>
+
+    <!-- Charger les scripts dans le bon ordre -->
+    <script src="{% static 'login_app/js/utils.js' %}"></script>
+    <script src="{% static 'login_app/js/maze.js' %}"></script>
+    <script src="{% static 'login_app/js/player.js' %}"></script>
+    <script src="{% static 'login_app/js/ghost.js' %}"></script>
+    <script src="{% static 'login_app/js/game.js' %}"></script>
+  </body>
+</html>

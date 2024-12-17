@@ -1,5 +1,5 @@
 from django import forms
-from .models import User, Item
+from .models import User
 
 # Formulaire pour la connexion des utilisateurs
 
@@ -34,14 +34,4 @@ class SignupForm(forms.ModelForm):
             'user_mail': {
                 'unique': "Cette adresse e-mail est déjà utilisée.",
             },
-        }
-
-class ItemForm(forms.ModelForm):
-    class Meta:
-        model = Item
-        fields = ['name', 'item_type', 'quantity'] 
-        labels = {
-            'name': 'Nom de l\'objet',
-            'item_type': 'Type d\'objet',
-            'quantity': 'Quantité',
         }

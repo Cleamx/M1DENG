@@ -1,9 +1,12 @@
+import json
+from django.http import JsonResponse
 from django.shortcuts import render, redirect,  get_object_or_404
 from django.contrib import messages
-from .models import User, Item
-from .forms import SignupForm, ItemForm
+from .models import Score, User
+from .forms import SignupForm
 from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 
 
 def login_view(request):
@@ -57,62 +60,28 @@ def signup_view(request):
     return render(request, 'login_app/signup.html', {'form': form})
 
 
-@login_required
-def inventory_list(request):
-    user_id = request.session.get('user_id')
-
-    if not user_id:
-        return redirect('login')
-
-    user = User.objects.get(user_id=user_id)
-
-    items = Item.objects.filter(user=user)
-
-    return render(request, 'login_app/list.html', {'items': items})
+def game_view(request):
+    return render(request, 'login_app/game.html')
 
 
-@login_required
-def add_item(request):
+def highscores(request):
+    scores = Score.objects.all().order_by('-score')[:10]
+    return render(request, 'login_app/highscores.html', {'scores': scores})
+
+
+@csrf_exempt
+def save_score(request):
     if request.method == 'POST':
-        form = ItemForm(request.POST)
-        if form.is_valid():
-            item = form.save(commit=False)
-            item.user = User.objects.get(user_login=request.user.user_login) 
-            item.save()
-            messages.success(request, 'Objet ajouté avec succès !')
-            return redirect('list')
-    else:
-        form = ItemForm()
-    return render(request, 'login_app/add_item.html', {'form': form})
+        try:
+            data = json.loads(request.body)
+            score_value = data.get('score')
+            user_login = request.session.get('user_login')
 
-
-@login_required
-def update_item(request, item_id):
-    user_id = request.session.get('user_id')
-    user = get_object_or_404(User, pk=user_id)
-    item = get_object_or_404(Item, id=item_id, user=user)
-
-    if request.method == 'POST':
-        form = ItemForm(request.POST, instance=item)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Objet mis à jour avec succès !')
-            return redirect('list')
-    else:
-        form = ItemForm(instance=item)
-
-    return render(request, 'login_app/update_item.html', {'form': form})
-
-
-@login_required
-def delete_item(request, item_id):
-    user_id = request.session.get('user_id')
-    user = get_object_or_404(User, pk=user_id)
-    item = get_object_or_404(Item, id=item_id, user=user)
-
-    if request.method == 'POST':
-        item.delete()
-        messages.success(request, 'Objet supprimé avec succès !')
-        return redirect('list')
-
-    return render(request, 'login_app/delete_item.html', {'item': item})
+            if user_login:
+                user = User.objects.get(user_login=user_login)
+                Score.objects.create(user=user, score=score_value)
+                return JsonResponse({'status': 'success'})
+            return JsonResponse({'status': 'error', 'message': 'User not found'})
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)})
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method'})

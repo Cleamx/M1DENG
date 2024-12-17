@@ -5,14 +5,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Bienvenue</title>
-    <link rel="stylesheet" href="{% static 'login_app/css/welcome.css' %}" />
+    <link rel="stylesheet" href="{% static 'login_app/css/welcome.css' %}">
   </head>
   <body>
     <div class="container">
       <h1>Bienvenue, {{ user_login }} !</h1>
-      <p>Vous êtes maintenant connecté.</p>
-
-      <a href="{% url 'list' %}"><button>Consulter votre inventaire</button></a>
+      <a href="{% url 'game' %}">Pac-Man</a>
       <a href="{% url 'logout' %}">Déconnexion</a>
     </div>
   </body>
