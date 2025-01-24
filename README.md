@@ -1,4 +1,4 @@
-# Master 1 Data Engineering
+# 📚 Master 1 Data Engineering
 
 Ce repository contient tous mes travaux et projets réalisés pendant mon année de Master 1 en Data Engineering.
 
@@ -23,7 +23,7 @@ Le repository est organisé en deux semestres (S1 et S2) contenant chacun les di
 - **Big Data**
 - **Reinforcement Learning (RL)**
 
-## Technologies Utilisées
+## 🛠️ Technologies Utilisées
 
 - Python (Data Science, Machine Learning)
 - SQL 
