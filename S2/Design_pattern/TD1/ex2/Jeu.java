@@ -9,5 +9,6 @@ public class Jeu {
 
         p.changerArme(new Epee());
         p.seBattre(); 
+        p.seDeplacer();
     }
 }
