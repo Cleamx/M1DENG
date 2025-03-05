@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: master-deploy
+spec:
+  replicas : 5
+  selector :
+    matchLabels:
+      app: master-deploy
+  template: 
+    metadata:
+      labels:
+        app: master-deploy
+    spec : 
+      containers:
+      - name: container-1
+        image: nginx:latest
+        ports:
+          - containerPort: 443

@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: master-pod
+  labels:
+    name: master-pod
+spec:
+  containers:
+  - name: grafana
+    image: grafana/grafana
+    # resources:
+    #   limits:
+    #     memory: "128Mi"
+    #     cpu: "500m"
+    ports:
+      - containerPort: 81
+
+  - name: server-web
+    image: nginx:latest
+    # resources:
+    #   limits
+    #     memory: "128Mi"
+    #     cpu: "500m"
+    ports:
+      - containerPort: 80

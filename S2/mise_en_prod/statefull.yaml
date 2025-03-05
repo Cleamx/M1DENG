@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: master-statefull
+spec:
+  selector:
+    matchLabels:
+      app: master-label
+  serviceName: master-label
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: master-label
+    spec:
+      containers:
+      - name: master-ctn
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+          name: web
+        volumeMounts: # On monter le volume cree ici
+        - name: www
+          mountPath: /usr/share/nginx/html # le chemin de montage 
+  volumeClaimTemplates:
+  - metadata:
+      name: www
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi

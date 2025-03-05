@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: <nom_du_deploiment>
+spec:
+  replicas : <nombre_pod>
+  selector :
+    matchLabels:
+      app: <un_selecteur>
+  template: 
+    metadata:
+      labels:
+        app: <label_du_match_label>
+    spec : 
+      containers:
+      - name: <nom_de_lAPP>
+        image: <images_docker>
+        ports:
+          - containerPort: <port>

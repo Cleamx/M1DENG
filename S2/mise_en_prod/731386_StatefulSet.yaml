@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: <nom-du-projet>
+spec:
+  selector:
+    matchLabels:
+      app: <un_selecteur>
+  serviceName: <nom_service>
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: <label_du_match_label>
+    spec:
+      containers:
+      - name: <nom_de_lAPP>
+        image: <image>
+        ports:
+        - containerPort: <port>
+          name: web
+        volumeMounts: # On monter le volume cree ici
+        - name: <nom_du_volume>
+          mountPath: /usr/share/nginx/html # le chemin de montage 
+  volumeClaimTemplates:
+  - metadata:
+      name: <nom_du_volume>
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi
