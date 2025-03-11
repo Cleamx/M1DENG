@@ -6,11 +6,11 @@ On considère un système de notification qui permet d'envoyer des alertes via d
 Voici le diagramme de classe:
 ![diagramme uml 1](photo_1.png)
 
-Une nouvelle équipe de développement propose une classe PushNotification qui possède une méthode pushMessage au lieu de sendNotification. Cette classe ne peut pas être modifiée directement pour implémenter l'interface Notifiable.
+Une nouvelle équipe de développement propose une classe Snap qui possède une méthode pushMessage au lieu de sendNotification. Cette classe ne peut pas être modifiée directement pour implémenter l'interface Notifiable.
 ````java
-public class PushNotification {
+public class Snap {
     public void pushMessage(String message) {
-        System.out.println("Notification Push envoyée : " + message);
+        System.out.println("Notification Snap envoyée : " + message);
     }
 }
 ````
@@ -20,17 +20,17 @@ Utiliser le pattern Adapter dans sa version « Object Adapter » pour résoudre 
 
 ##### Question 2 :
 
-Coder en Java votre solution de la question 1 en utilisant la classe PushNotification fournie.
+Coder en Java votre solution de la question 1 en utilisant la classe Snap fournie.
 
 L'exécution du programme doit donner lieu à un affichage console similaire à l'affichage suivant :
 ````
-Notification Push envoyée : Alerte importante !
+Notification snap envoyée : Alerte importante !
 ````
 ___
 # Correction
 ##### Question 1
 
-Pour utiliser la version "Object Adapter", il faut créer une classe PushNotificationAdapter qui hérite de la classe abstraite Notification et qui contient une instance de PushNotification.
+Pour utiliser la version "Object Adapter", il faut créer une classe SnapAdapter qui hérite de la classe abstraite Notification et qui contient une instance de Snap.
 
 Voici le diagramme UML : 
 
