@@ -1,4 +1,4 @@
-package TD3;
+package TD3.adapter;
 
 public class Tauren extends Personnage {
     private TaurenEtranger taurenEtranger;

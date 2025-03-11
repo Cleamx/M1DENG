@@ -1,4 +1,4 @@
-package TD3;
+package TD3.adapter;
 
 public class Orc extends Personnage {
 

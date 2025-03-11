@@ -1,4 +1,4 @@
-package TD3;
+package TD3.adapter;
 
 public abstract class Personnage implements Deplacable{
 	private String nom;

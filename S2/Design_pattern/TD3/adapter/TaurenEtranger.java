@@ -1,4 +1,4 @@
-package TD3;
+package TD3.adapter;
 
 public class TaurenEtranger {
 	public void avancer(){

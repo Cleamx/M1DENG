@@ -1,4 +1,4 @@
-package TD3;
+package TD3.adapter;
 
 public interface Deplacable {
  public void marcher();
