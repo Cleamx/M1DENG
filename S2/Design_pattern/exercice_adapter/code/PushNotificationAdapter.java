@@ -1,13 +1,12 @@
-public class PushNotificationAdapter extends AbstractNotification {
+public class PushNotificationAdapter extends Notification {
     private PushNotification pushNotification;
 
-    public PushNotificationAdapter(String message) {
-        super(message);
+    public PushNotificationAdapter() {
         pushNotification = new PushNotification();
     }
 
     @Override
-    public void sendNotification() {
+    public void sendNotification(String message) {
         pushNotification.pushMessage(message);
     }
 }
